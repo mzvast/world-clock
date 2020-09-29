@@ -8,7 +8,7 @@ import useTimezone from 'hooks/useTimezone';
  */
 
 import React, {useCallback, useState} from 'react';
-import styles from './AddClock.module.less';
+import style from './AddClock.module.less';
 
 interface Props {
     handleAddClock: (clock: string) => any;
@@ -20,22 +20,25 @@ const AddClock: React.FC<Props> = ({handleAddClock}) => {
         setIsEditing(!isEditing);
     }, [isEditing]);
 
-    const setZone = useCallback(e => {
-        handleAddClock(e);
-    }, [handleAddClock]);
+    const setZone = useCallback(
+        e => {
+            handleAddClock(e);
+        },
+        [handleAddClock]
+    );
+
+    const handleGridClick = useCallback(() => {
+        !isEditing && toggleMode();
+    }, [isEditing, toggleMode]);
 
     return (
-        <>
+        <div className={`${style.wrap} grid`} onClick={handleGridClick}>
             {isEditing ? (
-                <div className={styles.wrap}>
-                    <Selector timezones={timezones} onChange={setZone} />
-                </div>
+                <Selector timezones={timezones} onChange={setZone} />
             ) : (
-                <div className={styles.wrap} onClick={toggleMode}>
-                    <div className={styles.add}>+</div>
-                </div>
+                <div className={style.add}>+</div>
             )}
-        </>
+        </div>
     );
 };
 export default AddClock;
